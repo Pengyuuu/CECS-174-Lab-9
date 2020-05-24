@@ -1,18 +1,30 @@
 def get_interstate_number():
     # ask for route number, validate it, return number
-    number = int(input('Please enter a US Interstate Highway route number: '))
+    number = -1
     while number < 0:
-        number = int(input('Please enter a US Interstate Highway route number: '))
+        number = input('Please enter a US Interstate Highway route number: ')
+        if number[0:10] == 'Interstate':
+            number = number[11:]
+            number = int(number)
+        elif number.find('-') == 1:
+            number = number[2:]
+            number = int(number)
+        elif number.startswith('I') == True:
+            number = number[1:]
+            number = int(number)
+        number = int(number)
     return number
 
 def is_primary(number):
     # see if route number is primary or not
-    if number >= 100:
+    x = len(str(number))
+    if x == 3:
         return False
     else:
         return True
 def compass_orientation(number):
     # see how the route is oriented
+    number = int(number)
     x = number % 2
     even = 'east-west'
     odd = 'north-south'
@@ -30,17 +42,26 @@ def is_arterial(number):
         return False
 def auxiliary_type(number):
     # see if the route is auxiliary or not
-    number = number // 100
+    number = str(number)
+    x = number[0]
+    x = int(x)
+    y = x % 2
     even = 'radial highway'
     odd = 'spur highway'
-    if number % 2 == 0:
+    if y == 0:
         return even
     else:
         return odd
 def parent_highway(number):
     # find parent highway from route number
-    x = number % 100
-    return x
+    number = str(number)
+    start = len(number) - 2
+    result = number[start:len(number)]
+    if number[start] == '0':
+        result = result[1]
+        return result
+    else:
+        return result
 def main():
     # get route number and check if it is primary or not
     number = get_interstate_number()
